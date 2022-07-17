@@ -1,0 +1,13 @@
+{
+    "name": "lenvendo/lenvendo",
+    "description": "console app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*"
+    }
+}
