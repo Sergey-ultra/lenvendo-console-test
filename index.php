@@ -21,17 +21,17 @@ try {
             echo $command . ' ' . $description . \PHP_EOL;
         }
     } else {
-        [$command, $args, $options] = $app->run($argv);
-        echo 'Called command: ' . $command . \PHP_EOL;
-        if (!empty($args)) {
+        $commandDTO = $app->run($argv);
+        echo 'Called command: ' . $commandDTO->command . \PHP_EOL;
+        if (!empty($commandDTO->args)) {
             echo \PHP_EOL . 'Arguments: ' . \PHP_EOL;
-            Output::show($args);
+            Output::show($commandDTO->args);
         }
 
-        if (!empty($options)) {
+        if (!empty($commandDTO->options)) {
             echo \PHP_EOL . 'Options: ' . \PHP_EOL;
 
-            foreach ($options as $key => $value) {
+            foreach ($commandDTO->options as $key => $value) {
                 echo '- ' . $key . \PHP_EOL;
                 Output::show($value, 2);
             }

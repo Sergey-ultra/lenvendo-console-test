@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\DTO\CommandDTO;
 use App\Core\Exception\InputException;
 use Closure;
 
@@ -39,18 +40,18 @@ class Application
         return $list;
     }
 
-    public function run(array $input): array
+    public function run(array $input): CommandDTO
     {
-        [$command, $args, $options] = $this->parseCommand($input);
-        if (! in_array($command, array_keys($this->commandMap))) {
-            throw new InputException(sprintf('Команда "%s" не найдена', $command));
+        $commandDTO = $this->parseCommand($input);
+        if (! in_array($commandDTO->command, array_keys($this->commandMap))) {
+            throw new InputException(sprintf('Команда "%s" не найдена', $commandDTO->command));
         }
 
-        (new $this->commandMap[$command]())->call($args);
-        return  [$command, $args, $options];
+        (new $this->commandMap[$commandDTO->command]())->call($commandDTO->args);
+        return  $commandDTO;
     }
 
-    protected function parseCommand(array $input): array
+    protected function parseCommand(array $input): CommandDTO
     {
         $command = $input[0];
         array_shift($input);
@@ -71,6 +72,6 @@ class Application
             }
         }
 
-        return [$command, $args, $options];
+        return new CommandDTO($command, $args, $options);
     }
 }
